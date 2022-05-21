@@ -1,3 +1,16 @@
+# If you want to use the application you have to put your credentials from your firebase api in a .env.local file
+
+Name | FirebaseValue |
+--- | --- |
+REACT_APP_FIREBASE_API_KEY | apiKey |
+REACT_APP_FIREBASE_AUTH_DOMAIN | authDomain |
+REACT_APP_FIREBASE_PROJECT_ID | projectId |
+REACT_APP_FIREBASE_STORAGE_BUCKET | storageBucket |
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID | messagingSenderId |
+REACT_APP_FIREBASE_APP_ID | appId |
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
