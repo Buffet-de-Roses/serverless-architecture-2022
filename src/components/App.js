@@ -3,12 +3,14 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
 } from 'react-router-dom';
-import Home from '../pages/Home';
-import Signup from '../pages/Signup';
+import Home from './Home/Home';
+import Contact from './Contact';
+import About from './About';
+import Signup from './Register/Signup';
 import Header from './Header';
-import { Login } from '../pages/Login';
+import Login from './Login/Login';
+import Profil from './Profil/Profil';
 
 class App extends React.Component {
 
@@ -35,23 +37,17 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div className='app'>
-        <Header />
+      <div className="app">
         <Router>
-          <div className='App'>
-            <ul>
-              {this.state.routes.map((route) => 
-                <li key={route.name}>
-                  <Link to={route.route}>{route.name}</Link>
-                </li>
-              )}
-            </ul>
-            <Routes>
-              <Route exact path='/' element={ <Home />}></Route>
-              <Route exact path='/signup' element={ <Signup />}></Route>
-              <Route exact path='/signin' element={ <Login /> }></Route>
-            </Routes>
-          </div>
+          <Header />
+          <Routes>
+            <Route exact path='/' element={<Login />}></Route>
+            <Route exact path='/signup' element={<Signup />}></Route>
+            <Route exact path='/home' element={<Home />}></Route>
+            <Route exact path='/about' element={<About />}></Route>
+            <Route exact path='/profil' element={<Profil />}></Route>
+            <Route exact path='/contact' element={<Contact />}></Route>
+          </Routes>
         </Router>
       </div>
     );
