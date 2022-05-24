@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import './Profil.css';
-import { auth, db, logout } from '../Firebase';
+import { auth, db, logout } from '../../components/Firebase';
 import { query, collection, getDocs, where } from 'firebase/firestore';
 
 function Profil() {
