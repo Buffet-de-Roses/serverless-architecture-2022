@@ -4,31 +4,26 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
-import Home from './Home/Home';
-import Contact from './Contact';
-import About from './About';
-import Signup from './Register/Signup';
+import Home from '../pages/Home/Home';
+import Signup from '../pages/Register/Signup';
 import Header from './Header';
-import Login from './Login/Login';
-import Profil from './Profil/Profil';
-class App extends React.Component {
-  render() {
-    return (
-      <div className="app">
-        <Router>
-          <Header />
-          <Routes>
-            <Route exact path='/' element={<Login />}></Route>
-            <Route exact path='/signup' element={<Signup />}></Route>
-            <Route exact path='/home' element={<Home />}></Route>
-            <Route exact path='/about' element={<About />}></Route>
-            <Route exact path='/profil' element={<Profil />}></Route>
-            <Route exact path='/contact' element={<Contact />}></Route>
-          </Routes>
-        </Router>
-      </div>
-    );
-  }
+import Login from '../pages/Login/Login';
+import Profil from '../pages/Profil/Profil';
+
+function App() {
+  return (
+    <div className="app">
+      <Router>
+        <Header />
+        <Routes>
+          <Route exact path='/' element={<Login />}></Route>
+          <Route exact path='/signup' element={<Signup />}></Route>
+          <Route exact path='/home' element={<Home />}></Route>
+          <Route exact path='/profil' element={<Profil />}></Route>
+        </Routes>
+      </Router>
+    </div>
+  );
 }
 
 export default App;
