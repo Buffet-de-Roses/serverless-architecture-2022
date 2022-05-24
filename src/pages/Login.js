@@ -1,5 +1,5 @@
 import React from 'react';
-import { auth } from './Firebase';
+import { auth } from '../components/Firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export class Login extends React.Component {

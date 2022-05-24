@@ -5,14 +5,34 @@ import {
   Route,
   Link,
 } from 'react-router-dom';
-import Home from './Home';
-import Contact from './Contact';
-import About from './About';
-import Signup from './Signup';
+import Home from '../pages/Home';
+import Signup from '../pages/Signup';
 import Header from './Header';
-import { Login } from './Login';
+import { Login } from '../pages/Login';
 
 class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      routes: [{
+        name: 'Home',
+        route: '/',
+        page: <Home />,
+      },
+      {
+        name: 'Signup',
+        route: '/signup',
+        page: <Signup />
+      },
+      {
+        name: 'Signin',
+        route: '/signin',
+        page: <Login />
+      }
+      ]
+    };
+  }
   render() {
     return (
       <div className='app'>
@@ -20,26 +40,14 @@ class App extends React.Component {
         <Router>
           <div className='App'>
             <ul>
-              <li>
-                <Link to='/'>Home</Link>
-              </li>
-              <li>
-                <Link to='/about'>About</Link>
-              </li>
-              <li>
-                <Link to='/contact'>Contact</Link>
-              </li>
-              <li>
-                <Link to='/signup'>Signup</Link>
-              </li>
-              <li>
-                <Link to='signin'>Signin</Link>
-              </li>
+              {this.state.routes.map((route) => 
+                <li key={route.name}>
+                  <Link to={route.route}>{route.name}</Link>
+                </li>
+              )}
             </ul>
             <Routes>
               <Route exact path='/' element={ <Home />}></Route>
-              <Route exact path='/about' element={ <About />}></Route>
-              <Route exact path='/contact' element={ <Contact />}></Route>
               <Route exact path='/signup' element={ <Signup />}></Route>
               <Route exact path='/signin' element={ <Login /> }></Route>
             </Routes>

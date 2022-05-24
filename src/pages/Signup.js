@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Signup.css';
-import { auth } from './Firebase.js';
+import { auth } from '../components/Firebase.js';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 class Signup extends React.Component {
