@@ -13,9 +13,12 @@ import {
   getFirestore,
   query,
   getDocs,
+  doc,
   collection,
   where,
   addDoc,
+  onSnapshot,
+  QuerySnapshot,
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -86,6 +89,47 @@ const sendPasswordReset = async (email) => {
 const logout = () => {
   signOut(auth);
 };
+
+const getAllUsers = async () => {
+  let users = [];
+  const data = await getDocs(collection(db, 'users'));
+  data.forEach((doc) => {
+    users.push(doc.data());
+  });
+  return users;
+};
+
+const streamMessages = (snapshot, error) => {
+  const messagesRef = collection(db, 'messages');
+  const messagesQ = query(messagesRef);
+  return onSnapshot(messagesQ, snapshot, error);
+};
+
+// const getMessages = async () => {
+//   let messages = [];
+//   const data = await getDocs(collection(db, 'messages'));
+//   data.forEach((doc) => {
+//     messages.push(doc.data());
+//   });
+//   console.log(messages);
+//   return messages;
+// };
+
+// const getMessages = () => {
+//   let messages = [];
+//   const q = query(collection(db, 'messages'));
+//   onSnapshot(q, (querySnapshot) => {
+//     querySnapshot.forEach(doc => messages.push(doc.data()));
+//   });
+//   console.log(messages);
+//   return messages;
+// };
+
+// const getMessages = () => {
+//   const q = query(collection(db, 'messages'));
+//   return onSnapshot(q, (QuerySnapshot))
+// }
+
 export {
   auth,
   db,
@@ -95,4 +139,6 @@ export {
   registerWithEmailAndPassword,
   sendPasswordReset,
   logout,
+  getAllUsers,
+  streamMessages
 };

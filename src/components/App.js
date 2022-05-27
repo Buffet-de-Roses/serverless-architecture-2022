@@ -5,10 +5,11 @@ import {
   Route,
 } from 'react-router-dom';
 import Home from '../pages/Home/Home';
-import Signup from '../pages/Register/Signup';
+import Register from '../pages/Register/Signup';
 import Header from './Header';
 import Login from '../pages/Login/Login';
 import Profil from '../pages/Profil/Profil';
+import Chat from '../pages/Chat/Chat';
 
 function App() {
   return (
@@ -17,9 +18,10 @@ function App() {
         <Header />
         <Routes>
           <Route exact path='/' element={<Login />}></Route>
-          <Route exact path='/signup' element={<Signup />}></Route>
+          <Route exact path='/register' element={<Register />}></Route>
           <Route exact path='/home' element={<Home />}></Route>
           <Route exact path='/profil' element={<Profil />}></Route>
+          <Route exact path='/chat' element={<Chat />}></Route>
         </Routes>
       </Router>
     </div>
