@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { streamMessages } from '../../components/Firebase';
+import { sendMessage, streamMessages, streamUsers } from '../../components/Firebase';
 import './Chat.css';
 
 function Chat() {
@@ -29,11 +29,15 @@ function Chat() {
   //   return unsubscribe;
   // }, [messages, setMessages]);
 
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
-
   const [messages, setMessages] = useState();
+  const [users, setUsers] = useState();
+  const [message, setMessage] = useState('');
+
+  const submitMessage = (e) => {
+    e.preventDefault();
+    sendMessage(message);
+  };
+
   useEffect(() => {
     const unsubscribe = streamMessages((querySnapshot) => {
       const updatedMessages = querySnapshot.docs.map(docSnapshot => docSnapshot.data());
@@ -41,24 +45,32 @@ function Chat() {
     },
     (error) => console.log(error.message));
     return unsubscribe;
-  }, [messages, setMessages]);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = streamUsers((querySnapshot) => {
+      const updatedUsers = querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+      setUsers(updatedUsers);
+    },
+    (error) => console.log(error.message));
+    return unsubscribe;
+  }, []);
 
   return (
     <>
-      {/* <div className='realchat'>
-        <h2>Realtime chat</h2>
-        <div>
-          <h3>Users</h3>
-          {users?.map((user) => <p key={user.uid}>{user.email}</p>)}
-        </div>
-        <div>
-          <h3>Chat</h3>
-          {messages?.map((message) => <p key={message.message}>{message.message}</p>)}
-        </div>
-      </div> */}
+      <h2>Realtime chat</h2>
+      <div>
+        <h3>Users</h3>
+        {users?.map((user) => <p key={user.uid}>{user.email}</p>)}
+      </div>
       <div>
         <h3>Chat</h3>
         {messages?.map((message) => <p key={message.message}>{message.message}</p>)}
+      </div>
+      <div>
+        <h4>Send chat</h4>
+        <input value={message} onChange={(e) => setMessage(e.target.value)}/>
+        <button type='submit' onClick={submitMessage}>Send</button>
       </div>
     </>
   );

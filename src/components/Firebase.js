@@ -19,6 +19,7 @@ import {
   addDoc,
   onSnapshot,
   QuerySnapshot,
+  setDoc,
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -90,19 +91,22 @@ const logout = () => {
   signOut(auth);
 };
 
-const getAllUsers = async () => {
-  let users = [];
-  const data = await getDocs(collection(db, 'users'));
-  data.forEach((doc) => {
-    users.push(doc.data());
-  });
-  return users;
+const streamUsers = (snapshot, error) => {
+  const usersRef = collection(db, 'users');
+  const usersQ = query(usersRef);
+  return onSnapshot(usersQ, snapshot, error);
 };
 
 const streamMessages = (snapshot, error) => {
   const messagesRef = collection(db, 'messages');
   const messagesQ = query(messagesRef);
   return onSnapshot(messagesQ, snapshot, error);
+};
+
+const sendMessage = async (message) => {
+  await addDoc(collection(db, 'messages'), {
+    message
+  });
 };
 
 // const getMessages = async () => {
@@ -139,6 +143,7 @@ export {
   registerWithEmailAndPassword,
   sendPasswordReset,
   logout,
-  getAllUsers,
-  streamMessages
+  streamUsers,
+  streamMessages,
+  sendMessage,
 };
