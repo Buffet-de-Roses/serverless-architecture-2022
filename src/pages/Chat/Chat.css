@@ -1,15 +1,19 @@
 .me {
   background-color: lightgreen;
   align-self: flex-end;
-  width: 100px;
+  width: 130px;
   margin-bottom: 8px;
+  border-radius: 25px;
+  padding: 8px;
 }
 
 .other {
   background-color: lightgray;
   align-self: flex-start;
-  width: 100px;
+  width: 130px;
   margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 25px;
 }
 
 .me p {
@@ -29,6 +33,7 @@ h3 {
 .chatMessage {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .sendMessage {
