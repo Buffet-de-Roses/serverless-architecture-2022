@@ -28,7 +28,7 @@ function Chat(props) {
     },
     (error) => console.log(error.message));
     return unsubscribe;
-  }, []);
+  }, [props.chat]);
 
   useEffect(() => {
     const unsubscribe = streamConv(props.chat, (querySnapshot) => {
@@ -37,7 +37,7 @@ function Chat(props) {
     },
     (error) => console.log(error.message));
     return unsubscribe;
-  }, []);
+  }, [props.chat]);
 
   return (
     <>
@@ -47,6 +47,7 @@ function Chat(props) {
           <div className='chatMessage'>
             {messages?.map((message) =>
               <div  key={message.id} className={message.senderId === me.uid ? 'me' : 'other'}>
+                <p className='userName'>{props.users?.find(element => element.uid === message.senderId).name}</p>
                 <p>{message.message}</p>
                 <p>{milliToDate(message.createdAt)}</p>
               </div>)}

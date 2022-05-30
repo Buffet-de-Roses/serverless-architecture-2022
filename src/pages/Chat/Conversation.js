@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, createConvervastion, stream, streamYourConvs } from '../../components/Firebase';
+import { auth, createConvervastion, streamYourConvs } from '../../components/Firebase';
 import Chat from './Chat';
 import './Conversation.css';
 
-function NewConv() {
-  const [users, setUsers] = useState();
+function NewConv(props) {
   const [convName, setConvName] = useState('');
   const [me] = useAuthState(auth);
   const [usersConv, setUsersConv] = useState([]);
@@ -17,15 +16,6 @@ function NewConv() {
     setUsersConv([]);
   };
 
-  useEffect(() => {
-    const unsubscribe = stream('users', (querySnapshot) => {
-      const updatedUsers = querySnapshot.docs.map(docSnapshot => docSnapshot.data());
-      setUsers(updatedUsers);
-    },
-    (error) => console.log(error.message));
-    return unsubscribe;
-  }, []);
-
   /* eslint-disable react/prop-types */
   return (
     <>
@@ -33,7 +23,7 @@ function NewConv() {
       <form onSubmit={submitConv} className='form-conv'>
         <label>Conversation Name</label>
         <input value={convName} type='text' onChange={(e) => setConvName(e.target.value)}/>
-        {users?.map((user) =>
+        {props.users?.map((user) =>
           <label key={user.uid}>{user.email}<input type='checkbox' value={user.uid} onChange={(e) => setUsersConv(oldArray => [...oldArray, e.target.value])}/></label>
         )}
         <button type='submit'>Create</button>
@@ -67,7 +57,7 @@ function Conv(props) {
           )}
         </div>
         <div>
-          {chat && <Chat chat={chat}/>}
+          {chat && <Chat chat={chat} users={props.users}/>}
         </div>
       </div>
     </>
