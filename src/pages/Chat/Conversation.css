@@ -16,3 +16,15 @@ h4 {
 .button-conv {
   margin: 4px;
 }
+
+.newConv {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.conv {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}

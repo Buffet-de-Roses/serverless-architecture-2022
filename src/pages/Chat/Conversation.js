@@ -18,7 +18,7 @@ function NewConv(props) {
 
   /* eslint-disable react/prop-types */
   return (
-    <>
+    <div className='newConv'>
       <h4>Create Conversation</h4>
       <form onSubmit={submitConv} className='form-conv'>
         <label>Conversation Name</label>
@@ -28,7 +28,7 @@ function NewConv(props) {
         )}
         <button type='submit'>Create</button>
       </form>
-    </>
+    </div>
   );
 }
 
@@ -49,7 +49,7 @@ function Conv(props) {
 
   return (
     <>
-      <div>
+      <div className='conv'>
         <h4>Conversations</h4>
         <div className='chatAvailable'>
           {convs?.map((conv) =>

@@ -21,7 +21,6 @@ export default function HomeChat() {
     <>
       <h1>HomeChat</h1>
       <div className='homeChat'>
-        <h3>Conversations</h3>
         <NewConv users={users}/>
         <Conv me={me?.uid} users={users}/>
       </div>
