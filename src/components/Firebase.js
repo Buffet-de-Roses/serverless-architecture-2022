@@ -21,6 +21,7 @@ import {
   onSnapshot,
   QuerySnapshot,
   setDoc,
+  orderBy,
 } from 'firebase/firestore';
 import {
   getDownloadURL,
@@ -31,9 +32,14 @@ const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  databaseUrl: process.env.REACT_APP_FIREBASE_DATABASE_URL,
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messaginSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
+};
+
+const uid = function(){
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
 
 const app = initializeApp(firebaseConfig);
@@ -103,9 +109,9 @@ const streamUsers = (snapshot, error) => {
   return onSnapshot(usersQ, snapshot, error);
 };
 
-const streamMessages = (snapshot, error) => {
+const streamMessages = (id, snapshot, error) => {
   const messagesRef = collection(db, 'messages');
-  const messagesQ = query(messagesRef);
+  const messagesQ = query(messagesRef, where('conversationId', '==', id), orderBy('createdAt'));
   return onSnapshot(messagesQ, snapshot, error);
 };
 
@@ -115,20 +121,35 @@ const stream = (streaming, snapshot, error) => {
   return onSnapshot(sQ, snapshot, error);
 };
 
+const streamYourConvs = (id, snapshot, error) => {
+  const convsRef = collection(db, 'conversations');
+  const convsQ = query(convsRef, where('users', 'array-contains', id));
+  return onSnapshot(convsQ, snapshot, error);
+};
+
+const streamConv = (id, snapshot, error) => {
+  const convRef = collection(db, 'conversations');
+  const convQ = query(convRef, where('id', '==', id));
+  return onSnapshot(convQ, snapshot, error);
+};
+
 const createConvervastion = async (creatorId, name, users,) => {
   await addDoc(collection(db, 'conversations'), {
     creatorId,
     name,
     users,
     createdAt: Date.now(),
+    id: uid(),
   });
 };
 
-const sendMessage = async (senderId, message) => {
+const sendMessage = async (senderId, message, conversationId) => {
   await addDoc(collection(db, 'messages'), {
+    id: uid(),
     senderId,
     message,
     createdAt: Date.now(),
+    conversationId,
   });
 };
 
@@ -167,4 +188,6 @@ export {
   sendMessage,
   createConvervastion,
   uploadFile,
+  streamConv,
+  streamYourConvs,
 };

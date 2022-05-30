@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, createConvervastion, stream } from '../../components/Firebase';
+import { auth, createConvervastion, stream, streamYourConvs } from '../../components/Firebase';
+import Chat from './Chat';
+import './Conversation.css';
 
 function NewConv() {
   const [users, setUsers] = useState();
@@ -11,6 +13,8 @@ function NewConv() {
   const submitConv = (e) => {
     e.preventDefault();
     createConvervastion(me.uid, convName, usersConv);
+    setConvName('');
+    setUsersConv([]);
   };
 
   useEffect(() => {
@@ -26,7 +30,7 @@ function NewConv() {
   return (
     <>
       <h4>Create Conversation</h4>
-      <form onSubmit={submitConv}>
+      <form onSubmit={submitConv} className='form-conv'>
         <label>Conversation Name</label>
         <input value={convName} type='text' onChange={(e) => setConvName(e.target.value)}/>
         {users?.map((user) =>
@@ -38,25 +42,33 @@ function NewConv() {
   );
 }
 
-function Conv() {
+function Conv(props) {
   const [convs, setConvs] = useState();
+  const [chat, setChat] = useState();
 
   useEffect(() => {
-    const unsubscribe = stream('conversations', (querySnapshot) => {
-      const updatedConv = querySnapshot.docs.map(docSnapshot => docSnapshot.data());
-      setConvs(updatedConv);
-    },
-    (error) => console.log(error.message));
-    return unsubscribe;
-  }, []);
+    if (props.me) {
+      const unsubscribe = streamYourConvs(props.me, (querySnapshot) => {
+        const updatedConv = querySnapshot.docs.map(docSnapshot => docSnapshot.data());
+        setConvs(updatedConv);
+      },
+      (error) => console.log(error.message));
+      return unsubscribe;
+    }
+  }, [props.me]);
 
   return (
     <>
       <div>
         <h4>Conversations</h4>
-        {convs?.map((conv) => 
-          <p key={conv.name}>{conv.name}</p>
-        )}
+        <div className='chatAvailable'>
+          {convs?.map((conv) =>
+            <button className='button-conv' key={conv.id} onClick={() => setChat(conv.id)}>{conv.name}</button>
+          )}
+        </div>
+        <div>
+          {chat && <Chat chat={chat}/>}
+        </div>
       </div>
     </>
   );

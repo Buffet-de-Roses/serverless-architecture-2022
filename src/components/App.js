@@ -9,7 +9,7 @@ import Register from '../pages/Register/Signup';
 import Header from './Header';
 import Login from '../pages/Login/Login';
 import Profil from '../pages/Profil/Profil';
-import Chat from '../pages/Chat/Chat';
+import HomeChat from '../pages/Chat/HomeChat';
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
           <Route exact path='/register' element={<Register />}></Route>
           <Route exact path='/home' element={<Home />}></Route>
           <Route exact path='/profil' element={<Profil />}></Route>
-          <Route exact path='/chat' element={<Chat />}></Route>
+          <Route exact path='/chat' element={<HomeChat />}></Route>
         </Routes>
       </Router>
     </div>
