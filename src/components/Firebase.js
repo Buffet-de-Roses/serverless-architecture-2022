@@ -8,6 +8,7 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signOut,
+  updateProfile,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -21,6 +22,10 @@ import {
   QuerySnapshot,
   setDoc,
 } from 'firebase/firestore';
+import {
+  getDownloadURL,
+  getStorage, ref, uploadBytes
+} from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -34,6 +39,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
@@ -103,36 +109,48 @@ const streamMessages = (snapshot, error) => {
   return onSnapshot(messagesQ, snapshot, error);
 };
 
-const sendMessage = async (message) => {
-  await addDoc(collection(db, 'messages'), {
-    message
+const stream = (streaming, snapshot, error) => {
+  const sRef = collection(db, streaming);
+  const sQ = query(sRef);
+  return onSnapshot(sQ, snapshot, error);
+};
+
+const createConvervastion = async (creatorId, name, users,) => {
+  await addDoc(collection(db, 'conversations'), {
+    creatorId,
+    name,
+    users,
+    createdAt: Date.now(),
   });
 };
 
-// const getMessages = async () => {
-//   let messages = [];
-//   const data = await getDocs(collection(db, 'messages'));
-//   data.forEach((doc) => {
-//     messages.push(doc.data());
-//   });
-//   console.log(messages);
-//   return messages;
-// };
+const sendMessage = async (senderId, message) => {
+  await addDoc(collection(db, 'messages'), {
+    senderId,
+    message,
+    createdAt: Date.now(),
+  });
+};
 
-// const getMessages = () => {
-//   let messages = [];
-//   const q = query(collection(db, 'messages'));
-//   onSnapshot(q, (querySnapshot) => {
-//     querySnapshot.forEach(doc => messages.push(doc.data()));
-//   });
-//   console.log(messages);
-//   return messages;
-// };
+const uploadFile = async (file, currentUser) => {
+  try {
+    const fileRef = ref(storage, currentUser.uid + '.png');
+    const snapshot = await uploadBytes(fileRef, file);
+    const photoUrl = await getDownloadURL(fileRef);
 
-// const getMessages = () => {
-//   const q = query(collection(db, 'messages'));
-//   return onSnapshot(q, (QuerySnapshot))
-// }
+    const q = query(collection(db, 'users'), where('uid', '==', currentUser.uid));
+    const docs = await getDocs(q);
+    console.log(docs);
+    if (docs.docs.length === 0) {
+      await setDoc(collection(db, 'users'), {
+        photoUrl
+      });
+    }
+  } catch (e) {
+    alert(e.message);
+  }
+  
+};
 
 export {
   auth,
@@ -145,5 +163,8 @@ export {
   logout,
   streamUsers,
   streamMessages,
+  stream,
   sendMessage,
+  createConvervastion,
+  uploadFile,
 };

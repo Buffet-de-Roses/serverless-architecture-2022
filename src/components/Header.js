@@ -21,6 +21,9 @@ export default function Header() {
           <LinkContainer to="/profil">
             <Nav.Link>Profil</Nav.Link>
           </LinkContainer>
+          <LinkContainer to="/chat">
+            <Nav.Link>Chat</Nav.Link>
+          </LinkContainer>
           <LinkContainer to="/signup">
             <Nav.Link>SignUp</Nav.Link>
           </LinkContainer>
